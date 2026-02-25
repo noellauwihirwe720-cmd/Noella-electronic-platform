@@ -28,6 +28,18 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
             max-width: 400px;
             width: 100%;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .login-header {
@@ -43,6 +55,7 @@
         
         .login-header p {
             color: #666;
+            font-size: 0.9rem;
         }
         
         .form-group {
@@ -54,21 +67,29 @@
             margin-bottom: 0.5rem;
             color: #2c3e50;
             font-weight: 600;
+            font-size: 0.95rem;
         }
         
         .form-group input {
             width: 100%;
-            padding: 14px;
+            padding: 14px 16px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
             transition: all 0.3s;
+            background-color: #f8f9fa;
         }
         
         .form-group input:focus {
             border-color: #667eea;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-group input[readonly] {
+            cursor: default;
+            color: #2c3e50;
+            font-weight: 500;
         }
         
         .btn {
@@ -81,13 +102,64 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 1rem;
             transition: all 0.3s;
+            margin-top: 1rem;
         }
         
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .credentials-box {
+            background: #f8f9fa;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .credentials-box p {
+            margin: 8px 0;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        
+        .credentials-box strong {
+            color: #2c3e50;
+            min-width: 60px;
+            display: inline-block;
+        }
+        
+        .test-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .test-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-bottom: 1px dashed #667eea;
+        }
+        
+        .test-link a:hover {
+            color: #5a67d8;
+            border-bottom: 1px solid #5a67d8;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
         }
         
         .message {
@@ -102,41 +174,13 @@
         .message.success {
             background: #d4edda;
             color: #155724;
-            border: 1px solid #c3e6cb;
             display: block;
         }
         
         .message.error {
             background: #f8d7da;
             color: #721c24;
-            border: 1px solid #f5c6cb;
             display: block;
-        }
-        
-        .info-box {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            border-left: 4px solid #667eea;
-        }
-        
-        .info-box p {
-            margin: 5px 0;
-            color: #2c3e50;
-            font-size: 0.9rem;
-        }
-        
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #667eea;
-            text-decoration: none;
-        }
-        
-        .back-link:hover {
-            text-decoration: underline;
         }
         
         .login-footer {
@@ -146,35 +190,6 @@
             color: #999;
             border-top: 1px solid #eee;
             padding-top: 1rem;
-        }
-        
-        .password-container {
-            position: relative;
-        }
-        
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #666;
-            font-size: 1.2rem;
-        }
-        
-        .test-link {
-            margin-top: 20px;
-            text-align: center;
-        }
-        
-        .test-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .test-link a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
@@ -190,34 +205,30 @@
         <form id="loginForm">
             <div class="form-group">
                 <label>📧 Email Address</label>
-                <input type="email" id="email" placeholder="Enter admin email" required autofocus>
+                <input type="email" id="email" value="noella.electronics@outlook.com" readonly>
             </div>
             
             <div class="form-group">
                 <label>🔑 Password</label>
-                <div class="password-container">
-                    <input type="password" id="password" placeholder="Enter password" required>
-                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
-                </div>
+                <input type="password" id="password" value="Admin@noella.outlook" readonly>
             </div>
             
-            <div class="info-box">
+            <div class="credentials-box">
                 <p><strong>Admin Credentials:</strong></p>
-                <p>Email: noella.electronics@outlook.com</p>
-                <p>Password: Admin@noella.outlook</p>
+                <p>📧 Email: noella.electronics@outlook.com</p>
+                <p>🔑 Password: Admin@noella.outlook</p>
             </div>
             
-            <button href="admin.html">
+            <button type="submit" class="btn" id="loginBtn">
                 🔓 Login to Admin Panel
             </button>
         </form>
         
-        <!-- Direct test link (temporary) -->
         <div class="test-link">
-            <a href="#" onclick="testDirectAccess()">⚡ Direct Admin Access (Test)</a>
+            <a href="#" onclick="directAdminAccess()">⚡ Direct Admin Access (Test)</a>
         </div>
         
-        <a href="about.html" class="back-link">← Back to About Us</a>
+        <a href="index.html" class="back-link">← Back to Home</a>
         
         <div class="login-footer">
             <p>© 2026 Noella Electronics - Secure Admin Access</p>
@@ -229,22 +240,8 @@
         const VALID_EMAIL = "noella.electronics@outlook.com";
         const VALID_PASSWORD = "Admin@noella.outlook";
         
-        // ==================== TOGGLE PASSWORD VISIBILITY ====================
-        window.togglePassword = function() {
-            const passwordInput = document.getElementById('password');
-            const toggleBtn = document.querySelector('.toggle-password');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleBtn.textContent = '🔒';
-            } else {
-                passwordInput.type = 'password';
-                toggleBtn.textContent = '👁️';
-            }
-        };
-        
-        // ==================== TEST DIRECT ACCESS ====================
-        window.testDirectAccess = function() {
+        // ==================== DIRECT ADMIN ACCESS ====================
+        window.directAdminAccess = function() {
             // Generate token and go directly to admin
             const token = btoa(Date.now() + '-' + Math.random().toString(36));
             localStorage.setItem('adminToken', token);
@@ -257,49 +254,44 @@
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('message');
+            
+            // Hide any previous messages
+            messageDiv.style.display = 'none';
             
             // Disable button while processing
             loginBtn.disabled = true;
             loginBtn.textContent = '⏳ Verifying...';
             
-            // Check if fields are empty
-            if (!email || !password) {
-                showMessage('error', '❌ Please enter both email and password');
-                loginBtn.disabled = false;
-                loginBtn.textContent = '🔓 Login to Admin Panel';
-                return;
-            }
-            
-            // Check credentials
-            if (email === VALID_EMAIL && password === VALID_PASSWORD) {
-                // Success
-                showMessage('success', '✅ Login successful! Redirecting to admin panel...');
-                
-                // Create session token
-                const token = btoa(Date.now() + '-' + Math.random().toString(36));
-                localStorage.setItem('adminToken', token);
-                localStorage.setItem('adminLoggedIn', 'true');
-                
-                console.log('✅ Login successful - redirecting to admin.html');
-                
-                // Redirect to admin panel
-                setTimeout(function() {
-                    window.location.href = 'admin.html?token=' + token;
-                }, 1500);
-            } else {
-                // Failed login
-                showMessage('error', '❌ Invalid email or password. Please check your credentials.');
-                
-                // Clear password field
-                document.getElementById('password').value = '';
-                document.getElementById('password').focus();
-                
-                loginBtn.disabled = false;
-                loginBtn.textContent = '🔓 Login to Admin Panel';
-            }
+            // Simulate slight delay for better UX
+            setTimeout(() => {
+                // Check credentials (they are static so always true)
+                if (email === VALID_EMAIL && password === VALID_PASSWORD) {
+                    // Success
+                    showMessage('success', '✅ Login successful! Redirecting...');
+                    
+                    // Generate simple token
+                    const token = btoa(Date.now() + '-' + Math.random().toString(36));
+                    localStorage.setItem('adminToken', token);
+                    localStorage.setItem('adminEmail', email);
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    
+                    console.log('✅ Login successful for:', email);
+                    
+                    // Redirect to admin panel
+                    setTimeout(() => {
+                        window.location.href = 'admin.html?token=' + token;
+                    }, 1500);
+                } else {
+                    // This should never happen with readonly fields, but keep for security
+                    showMessage('error', '❌ Invalid email or password');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '🔓 Login to Admin Panel';
+                }
+            }, 500);
         });
         
         // ==================== SHOW MESSAGE ====================
@@ -307,11 +299,14 @@
             const messageDiv = document.getElementById('message');
             messageDiv.className = `message ${type}`;
             messageDiv.textContent = text;
+            messageDiv.style.display = 'block';
             
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
+            // Auto hide after 5 seconds for success
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            }
         }
         
         // ==================== CHECK FOR EXISTING SESSION ====================
@@ -320,7 +315,7 @@
             const existingLogin = localStorage.getItem('adminLoggedIn');
             
             if (existingToken && existingLogin === 'true') {
-                console.log('Existing session found, redirecting to admin...');
+                console.log('Existing session found, redirecting...');
                 window.location.href = 'admin.html?token=' + existingToken;
             }
         })();
@@ -331,13 +326,6 @@
                 document.getElementById('loginForm').dispatchEvent(new Event('submit'));
             }
         });
-        
-        // ==================== CLEAR ANY AUTO-FILL ====================
-        window.onload = function() {
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('email').focus();
-        };
     </script>
 </body>
 </html>
