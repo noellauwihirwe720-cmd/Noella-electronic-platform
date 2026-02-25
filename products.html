@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Noella Electronics</title>
+    <link rel="stylesheet" href="style.css">
+ <style>
+    .products-header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 2rem 1rem; /* reduced */
+        text-align: center;
+    }
+
+    .products-header h1 {
+        font-size: 24px;
+    }
+
+    .filter-bar {
+        max-width: 1100px;
+        margin: 1.5rem auto;
+        padding: 0 15px;
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .filter-select {
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        min-width: 130px;
+        font-size: 14px;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin: 1.5rem 0;
+        flex-wrap: wrap;
+    }
+
+    .page-btn {
+        padding: 6px 12px;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .page-btn.active {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+    }
+
+    .no-products,
+    .loading {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: #666;
+        grid-column: 1 / -1;
+        font-size: 14px;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        overflow-y: auto; /* allow scroll on small screens */
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 5% auto; /* better vertical fit */
+        padding: 1.5rem;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 450px;
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        right: 1rem;
+        top: 0.8rem;
+        font-size: 1.4rem;
+        cursor: pointer;
+    }
+
+    /* 📱 Mobile Optimization */
+    @media (max-width: 768px) {
+
+        .products-header {
+            padding: 1.5rem 1rem;
+        }
+
+        .products-header h1 {
+            font-size: 18px;
+        }
+
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-select {
+            width: 100%;
+        }
+
+        .modal-content {
+            margin: 10% auto;
+            padding: 1.2rem;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>Noella Electronics</h1>
+                <span class="tagline">Your Trusted Electronic Store in Kigali</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html" class="active">Products</a>
+                <a href="contact.html">Contact</a>
+                <div class="cart-icon" onclick="viewCart()">
+                    🛒 <span id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Products Header -->
+    <div class="products-header">
+        <h2>All Products</h2>
+        <p>Browse our complete collection of electronics</p>
+    </div>
+    
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <select class="filter-select" id="categoryFilter" onchange="filterProducts()">
+            <option value="all">All Categories</option>
+            <option value="phones">📱 Phones</option>
+            <option value="laptops">💻 Laptops</option>
+            <option value="tvs">📺 TVs</option>
+            <option value="speakers">🔊 Speakers</option>
+            <option value="headphones">🎧 Headphones</option>
+        </select>
+        
+        <select class="filter-select" id="sortFilter" onchange="filterProducts()">
+            <option value="newest">Newest First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Name: A to Z</option>
+        </select>
+    </div>
+    
+    <!-- Products Grid -->
+    <section class="featured-products">
+        <div class="products-grid" id="allProducts">
+            <div class="loading">Loading products...</div>
+        </div>
+    </section>
+    
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="weather-info">
+                <span>☁️</span>
+                <span>22°C Kigali</span>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search products...">
+                <button onclick="searchProducts()">🔍</button>
+            </div>
+            <div class="datetime" id="currentDateTime"></div>
+        </div>
+    </footer>
+    
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <strong>Total: <span id="cartTotal">0</span> RWF</strong>
+            </div>
+            <button class="btn btn-success" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // THIS WORKS WITH LOCALSTORAGE (same as admin panel)
+        
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const productsPerPage = 12;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Load all products from localStorage
+        function loadAllProducts() {
+            const grid = document.getElementById('allProducts');
+            
+            // Get products from localStorage (saved by admin panel)
+            const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
+            allProducts = storedProducts;
+            
+            console.log('Loaded products:', allProducts.length);
+            
+            // Check for search query from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchTerm = urlParams.get('search');
+            const categoryParam = urlParams.get('category');
+            
+            if (searchTerm) {
+                document.getElementById('searchInput').value = searchTerm;
+                // Filter by search term
+                allProducts = allProducts.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (p.description && p.description.toLowerCase().includes(searchTerm.toLowerCase()))
+                );
+            }
+            
+            if (categoryParam) {
+                document.getElementById('categoryFilter').value = categoryParam;
+            }
+            
+            filterProducts();
+        }
+        
+        // Filter and sort products
+        function filterProducts() {
+            const category = document.getElementById('categoryFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+            
+            let filtered = [...allProducts];
+            
+            // Filter by category
+            if (category !== 'all') {
+                filtered = filtered.filter(p => p.category === category);
+            }
+            
+            // Sort products
+            filtered.sort((a, b) => {
+                const priceA = Number(a.price) || 0;
+                const priceB = Number(b.price) || 0;
+                const nameA = a.name || '';
+                const nameB = b.name || '';
+                const dateA = a.createdAt || '';
+                const dateB = b.createdAt || '';
+                
+                switch(sort) {
+                    case 'price-low':
+                        return priceA - priceB;
+                    case 'price-high':
+                        return priceB - priceA;
+                    case 'name':
+                        return nameA.localeCompare(nameB);
+                    default: // newest first
+                        return dateB.localeCompare(dateA);
+                }
+            });
+            
+            filteredProducts = filtered;
+            currentPage = 1; // Reset to first page when filtering
+            displayProducts();
+        }
+        
+        // Display products with pagination
+        function displayProducts() {
+            const grid = document.getElementById('allProducts');
+            
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = '<div class="no-products">No products found</div>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+            
+            const start = (currentPage - 1) * productsPerPage;
+            const end = start + productsPerPage;
+            const paginatedProducts = filteredProducts.slice(start, end);
+            
+            grid.innerHTML = paginatedProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">${Number(product.price).toLocaleString()} RWF</p>
+                        <p class="product-stock">${product.quantity > 0 ? '✅ In Stock' : '❌ Out of Stock'}</p>
+                        <button class="add-to-cart" 
+                                onclick="addToCart(${product.id})"
+                                ${product.quantity === 0 ? 'disabled' : ''}>
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update pagination
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            updatePagination(totalPages);
+        }
+        
+        // Update pagination
+        function updatePagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // Previous button
+            if (currentPage > 1) {
+                html += `<button class="page-btn" onclick="goToPage(${currentPage - 1})">←</button>`;
+            }
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (
+                    i === 1 || 
+                    i === totalPages || 
+                    (i >= currentPage - 2 && i <= currentPage + 2)
+                ) {
+                    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                                   onclick="goToPage(${i})">${i}</button>`;
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    html += `<span class="page-btn" style="background: none; border: none;">...</span>`;
+                }
+            }
+            
+            // Next button
+            if (currentPage < totalPages) {
+                html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})">→</button>`;
+            }
+            
+            pagination.innerHTML = html;
+        }
+        
+        // Go to page
+        function goToPage(page) {
+            currentPage = page;
+            displayProducts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Add to cart
+        window.addToCart = function(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            
+            if (!product) {
+                alert('Product not found');
+                return;
+            }
+            
+            if (product.quantity <= 0) {
+                alert('Out of stock');
+                return;
+            }
+            
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                if (existingItem.quantity < product.quantity) {
+                    existingItem.quantity++;
+                } else {
+                    alert('Not enough stock');
+                    return;
+                }
+            } else {
+                cart.push({
+                    id: productId,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1,
+                    maxQuantity: product.quantity,
+                    image: product.imageUrl
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert('✅ Added to cart!');
+        };
+        
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartCountEl = document.getElementById('cartCount');
+            if (cartCountEl) cartCountEl.textContent = count;
+        }
+        
+        // View cart
+        window.viewCart = function() {
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; padding: 20px;">Your cart is empty</p>';
+                cartTotal.textContent = '0';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                        <img src="${item.image || 'https://via.placeholder.com/50'}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0 0 5px 0;">${item.name}</h4>
+                            <p style="margin: 0; color: #666;">${Number(item.price).toLocaleString()} RWF x ${item.quantity}</p>
+                        </div>
+                        <div>
+                            <button onclick="updateQuantity(${item.id}, -1)" style="padding: 5px 10px; margin: 0 5px; background: #f0f0f0; border: none; border-radius: 3px; cursor: pointer;">-</button>
+                            <span style="margin: 0 5px; font-weight: bold;">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" style="padding: 5px 10px; margin: 0 5px; background: #f0f0f0; border: none; border-radius: 3px; cursor: pointer;">+</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                cartTotal.textContent = total.toLocaleString();
+            }
+            
+            modal.style.display = 'block';
+        };
+        
+        // Update quantity
+        window.updateQuantity = function(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            const product = allProducts.find(p => p.id === productId);
+            
+            if (!item || !product) return;
+            
+            const newQuantity = item.quantity + change;
+            
+            if (newQuantity === 0) {
+                cart = cart.filter(i => i.id !== productId);
+            } else if (newQuantity > 0 && newQuantity <= product.quantity) {
+                item.quantity = newQuantity;
+            } else {
+                alert('Maximum stock reached');
+                return;
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            viewCart(); // Refresh modal
+        };
+        
+        // ==================== FIXED CHECKOUT FUNCTION (NO DEMO MODE) ====================
+        window.checkout = function() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+            
+            // Save current cart to pending order
+            localStorage.setItem('pendingOrder', JSON.stringify(cart));
+            
+            // Redirect to contact page with checkout mode
+            window.location.href = 'contact.html?checkout=true';
+            
+            // NO ALERT HERE - The success message will show on the contact page
+        };
+        
+        // Search products
+        window.searchProducts = function() {
+            const term = document.getElementById('searchInput').value.trim();
+            if (term) {
+                window.location.href = `products.html?search=${encodeURIComponent(term)}`;
+            }
+        };
+        
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const dateTimeEl = document.getElementById('currentDateTime');
+            if (dateTimeEl) {
+                dateTimeEl.innerHTML = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: true 
+                }) + ' • ' + now.toLocaleDateString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: 'numeric'
+                });
+            }
+        }
+        
+        // Close modal when clicking X
+        document.querySelector('.close')?.addEventListener('click', () => {
+            document.getElementById('cartModal').style.display = 'none';
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('cartModal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Enter key for search
+        document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllProducts();
+            updateCartCount();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        });
+    </script>
+</body>
+</html>

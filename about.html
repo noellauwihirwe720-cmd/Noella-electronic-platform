@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Noella Electronics</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .about-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 20px;
+        }
+        
+        .about-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 3rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .about-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .about-card h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .about-card p {
+            line-height: 1.8;
+            color: #666;
+        }
+        
+        .admin-note {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .admin-link {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .admin-link:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>Noella Electronics</h1>
+                <span class="tagline">Your Trusted Electronic Store in Kigali</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="products.html">Products</a>
+                <a href="about.html" class="active">About Us</a>
+                <a href="contact.html">Contact</a>
+                <div class="cart-icon" onclick="viewCart()">
+                    🛒 <span id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="about-section">
+        <div class="about-header">
+            <h1>About Noella Electronics</h1>
+            <p>Your Trusted Electronic Store in Kigali Since 2024</p>
+        </div>
+        
+        <div class="about-content">
+            <div class="about-card">
+                <h2>📱 Our Story</h2>
+                <p>Noella Electronics started with a simple mission: to bring quality electronics to the people of Rwanda at affordable prices. Located in Musanze, we've been serving customers with dedication and passion.</p>
+                <p>We believe that everyone deserves access to the latest technology without breaking the bank.</p>
+
+            </div>
+            
+            <div class="about-card">
+                <h2>🎯 Our Mission</h2>
+                <p>To provide the best electronic devices with exceptional customer service. We carefully select each product to ensure quality and reliability.</p>
+                <p>Your satisfaction is our priority!</p>
+            </div>
+        </div>
+        
+        <!-- Admin access note - visible to everyone but login required -->
+        <div class="admin-note">
+            <p>🔒 <strong>Store Administrators Only:</strong> <a href="admin-login.html" class="admin-link">Access Admin Panel</a> (requires staff login)</p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="weather-info">
+                <span>☁️</span>
+                <span>22°C Musanze</span>
+            </div>
+            <div class="datetime" id="currentDateTime"></div>
+        </div>
+    </footer>
+    
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDateTime').innerHTML = now.toLocaleTimeString() + ' • ' + now.toLocaleDateString();
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+<h4>@2026 developed by ibpro2x creator and noella on 01 apps</h4>
+</html>

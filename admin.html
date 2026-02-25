@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Noella Electronics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header with navigation */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .home-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .home-btn:hover {
+            background: #2980b9;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .product-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #219a52;
+        }
+
+        .products-list {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-details h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .product-details p {
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        .success-message {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        /* Footer navigation */
+        .admin-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-link {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- SINGLE PROTECTION SCRIPT - FIXED -->
+    <script>
+        // ==================== SIMPLE ADMIN PROTECTION ====================
+        (function() {
+            // Check if user is authorized
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const storedToken = localStorage.getItem('adminToken');
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            
+            console.log('Admin Protection Check:');
+            console.log('Token from URL:', token);
+            console.log('Stored Token:', storedToken);
+            console.log('Is Logged In:', isLoggedIn);
+            
+            // Allow access if:
+            // 1. There's a token in URL that matches stored token AND user is logged in
+            const isValid = (token && token === storedToken && isLoggedIn === 'true');
+            
+            if (!isValid) {
+                console.log('❌ Not authorized - redirecting to login');
+                window.location.href = 'admin_login.html';
+            } else {
+                console.log('✅ Authorized - Welcome Admin!');
+            }
+        })();
+    </script>
+
+    <div class="admin-container">
+        <!-- Admin Header with Navigation -->
+        <div class="admin-header">
+            <h1>📱 Noella Electronics</h1>
+            <div class="nav-buttons">
+                <a href="index.html" class="home-btn">
+                    🏠 Back to Home
+                </a>
+                <button onclick="logout()" class="logout-btn">
+                    🚪 Logout
+                </button>
+            </div>
+        </div>
+        
+        <div id="successMessage" class="success-message"></div>
+        <div id="errorMessage" class="error-message"></div>
+        
+        <div class="product-form">
+            <h2>Add New Product</h2>
+            <form id="productForm">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="productName" required placeholder="e.g., iPhone 15 Pro Max">
+                </div>
+                
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="productCategory" required>
+                        <option value="phones">📱 Phones</option>
+                        <option value="laptops">💻 Laptops</option>
+                        <option value="tvs">📺 TVs</option>
+                        <option value="speakers">🔊 Speakers</option>
+                        <option value="headphones">🎧 Headphones</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Price (RWF)</label>
+                    <input type="number" id="productPrice" required placeholder="e.g., 150000">
+                </div>
+                
+                <div class="form-group">
+                    <label>Quantity in Stock</label>
+                    <input type="number" id="productQuantity" required placeholder="e.g., 10">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="4" required placeholder="Product features..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <input type="file" id="productImage" accept="image/*" required>
+                    <img id="imagePreview" class="image-preview">
+                </div>
+                
+                <button type="submit" class="btn">📤 Upload Product</button>
+            </form>
+        </div>
+        
+        <div class="products-list">
+            <h2>Current Products</h2>
+            <div id="productsList">
+                <p style="text-align: center; color: #666;">Loading products...</p>
+            </div>
+        </div>
+        
+        <!-- Admin Footer with Links -->
+        <div class="admin-footer">
+            <div class="footer-links">
+                <a href="index.html" class="footer-link">🏠 Home</a>
+                <a href="products.html" class="footer-link">📦 Products</a>
+                <a href="contact.html" class="footer-link">📞 Contact</a>
+                <a href="about.html" class="footer-link">📋 About</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Noella Electronics
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== LOAD PRODUCTS ====================
+        function loadProducts() {
+            const productsList = document.getElementById('productsList');
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            
+            if (products.length === 0) {
+                productsList.innerHTML = '<p style="text-align: center; color: #666;">No products yet. Add your first product above!</p>';
+                return;
+            }
+            
+            let html = '';
+            products.forEach(product => {
+                html += `
+                    <div class="product-item">
+                        <img src="${product.imageUrl || 'https://via.placeholder.com/80'}" alt="${product.name}">
+                        <div class="product-details">
+                            <h3>${product.name}</h3>
+                            <p>💰 ${Number(product.price).toLocaleString()} RWF</p>
+                            <p>📦 Stock: ${product.quantity}</p>
+                            <p>🏷️ Category: ${product.category}</p>
+                            <p>📝 ${product.description || 'No description'}</p>
+                        </div>
+                        <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
+                    </div>
+                `;
+            });
+            
+            productsList.innerHTML = html;
+        }
+
+        // ==================== DELETE PRODUCT ====================
+        window.deleteProduct = function(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                let products = JSON.parse(localStorage.getItem('products')) || [];
+                products = products.filter(p => p.id !== id);
+                localStorage.setItem('products', JSON.stringify(products));
+                loadProducts();
+                showMessage('success', 'Product deleted successfully!');
+            }
+        };
+
+        // ==================== SHOW MESSAGE ====================
+        function showMessage(type, text) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (type === 'success') {
+                successMsg.textContent = text;
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                setTimeout(() => successMsg.style.display = 'none', 3000);
+            } else {
+                errorMsg.textContent = text;
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                setTimeout(() => errorMsg.style.display = 'none', 3000);
+            }
+        }
+
+        // ==================== IMAGE PREVIEW ====================
+        document.getElementById('productImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ==================== FORM SUBMISSION ====================
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const description = document.getElementById('productDescription').value;
+            const imageFile = document.getElementById('productImage').files[0];
+            
+            if (!imageFile) {
+                showMessage('error', 'Please select an image');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                
+                // Create new product
+                const newProduct = {
+                    id: Date.now(),
+                    name: name,
+                    category: category,
+                    price: price,
+                    quantity: quantity,
+                    description: description,
+                    imageUrl: imageUrl
+                };
+                
+                // Save to localStorage
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                products.push(newProduct);
+                localStorage.setItem('products', JSON.stringify(products));
+                
+                // Reset form
+                document.getElementById('productForm').reset();
+                document.getElementById('imagePreview').style.display = 'none';
+                
+                // Show success message
+                showMessage('success', '✅ Product uploaded successfully!');
+                
+                // Reload products list
+                loadProducts();
+            };
+            
+            reader.readAsDataURL(imageFile);
+        });
+
+        // ==================== INITIAL LOAD ====================
+        loadProducts();
+        
+        // ==================== LOGOUT FUNCTION ====================
+        window.logout = function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminLoggedIn');
+                window.location.href = 'admin_login.html';
+            }
+        };
+    </script>
+</body>
+</html>
