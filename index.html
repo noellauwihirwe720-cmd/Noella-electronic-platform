@@ -300,6 +300,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: background 0.3s;
+            font-size: 1rem;
         }
 
         .add-to-cart:hover {
@@ -484,6 +485,31 @@
             text-decoration: underline;
             color: var(--secondary-color);
         }
+
+        /* Demo products for testing */
+        .demo-notice {
+            background: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            text-align: center;
+            margin: 10px auto;
+            max-width: 1200px;
+            border-radius: 5px;
+        }
+
+        .demo-notice button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .demo-notice button:hover {
+            background: #219a52;
+        }
     </style>
 </head>
 <body>
@@ -515,6 +541,11 @@
             <a href="products.html" class="btn btn-primary">Shop Now</a>
         </div>
     </section>
+
+    <!-- Demo Products Notice (will show when no products exist) -->
+    <div id="demoNotice" class="demo-notice" style="display: none;">
+        ⚡ No products found. Click <button onclick="addDemoProducts()">Add Demo Products</button> to see sample products with working "Buy" buttons.
+    </div>
 
     <!-- Featured Categories with Descriptions -->
     <section class="categories">
@@ -598,6 +629,76 @@
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let products = [];
         
+        // ==================== ADD DEMO PRODUCTS ====================
+        window.addDemoProducts = function() {
+            const demoProducts = [
+                {
+                    id: 1001,
+                    name: "iPhone 15 Pro Max",
+                    category: "phones",
+                    price: 1500000,
+                    quantity: 10,
+                    description: "Latest Apple smartphone with A17 Pro chip, titanium design, and advanced camera system.",
+                    imageUrl: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-15-pro-max-finish-select-202309-6-7inch-bluetitanium?wid=5120&hei=2880&fmt=webp"
+                },
+                {
+                    id: 1002,
+                    name: "Samsung 4K Smart TV",
+                    category: "tvs",
+                    price: 850000,
+                    quantity: 5,
+                    description: "55-inch 4K Ultra HD Smart TV with vibrant colors and built-in streaming apps.",
+                    imageUrl: "https://images.samsung.com/is/image/samsung/p6pim/uk/ua55tu8000kxxu/gallery/uk-uhd-tu8000-ua55tu8000kxxu-368459481?$650_519_PNG$"
+                },
+                {
+                    id: 1003,
+                    name: "MacBook Air M2",
+                    category: "laptops",
+                    price: 1800000,
+                    quantity: 8,
+                    description: "13.6-inch laptop with Apple M2 chip, all-day battery life, and stunning Liquid Retina display.",
+                    imageUrl: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-midnight-select-20220606?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1653084303665"
+                },
+                {
+                    id: 1004,
+                    name: "Sony WH-1000XM5",
+                    category: "headphones",
+                    price: 450000,
+                    quantity: 15,
+                    description: "Industry-leading noise canceling wireless headphones with exceptional sound quality.",
+                    imageUrl: "https://www.sony.com/image/5d7b6e8b0c8e8b5c0b8c8b5c0b8c8b5c?fmt=jpeg&wid=600"
+                }
+            ];
+            
+            localStorage.setItem('products', JSON.stringify(demoProducts));
+            products = demoProducts;
+            loadProducts();
+            document.getElementById('demoNotice').style.display = 'none';
+            showNotification('✅ Demo products added! You can now test the Buy buttons.', 'success');
+        };
+        
+        // ==================== SHOW NOTIFICATION ====================
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+                color: white;
+                border-radius: 5px;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
         // ==================== LOAD PRODUCTS ====================
         function loadProducts() {
             const grid = document.getElementById('featuredProducts');
@@ -610,8 +711,11 @@
             
             if (products.length === 0) {
                 grid.innerHTML = '<div class="no-products">No products yet. Check back soon!</div>';
+                document.getElementById('demoNotice').style.display = 'block';
                 return;
             }
+            
+            document.getElementById('demoNotice').style.display = 'none';
             
             // Show only first 8 products on homepage
             const featuredProducts = products.slice(0, 8);
@@ -677,7 +781,7 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
-            alert('✅ Added to cart!');
+            showNotification('✅ Added to cart!', 'success');
         };
         
         // ==================== UPDATE CART COUNT ====================
