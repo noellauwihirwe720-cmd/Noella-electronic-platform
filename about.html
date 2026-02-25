@@ -47,20 +47,31 @@
         
         .admin-note {
             background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 5px;
+            padding: 2rem;
+            border-radius: 10px;
             margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #666;
+            text-align: center;
+            border: 2px dashed #3498db;
+        }
+        
+        .admin-note p {
+            color: #2c3e50;
+            margin-bottom: 1rem;
         }
         
         .admin-link {
-            color: #3498db;
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
             text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
         }
         
         .admin-link:hover {
-            text-decoration: underline;
+            background: #2980b9;
         }
         
         footer {
@@ -98,7 +109,6 @@
                 <h2>📱 Our Story</h2>
                 <p>Noella Electronics started with a simple mission: to bring quality electronics to the people of Rwanda at affordable prices. Located in Musanze, we've been serving customers with dedication and passion.</p>
                 <p>We believe that everyone deserves access to the latest technology without breaking the bank.</p>
-
             </div>
             
             <div class="about-card">
@@ -108,9 +118,11 @@
             </div>
         </div>
         
-        <!-- Admin access note - visible to everyone but login required -->
+        <!-- Admin access section - FIXED LINK -->
         <div class="admin-note">
-            <p>🔒 <strong>Store Administrators Only:</strong> <a href="admin-login.html" class="admin-link">Access Admin Panel</a> (requires staff login)</p>
+            <p>🔒 <strong>Store Administrators Only:</strong></p>
+            <a href="admin_login.html" class="admin-link">Access Admin Panel</a>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">(requires staff login)</p>
         </div>
     </div>
     
@@ -133,5 +145,4 @@
         setInterval(updateDateTime, 1000);
     </script>
 </body>
-<h4>@2026 developed by ibpro2x creator and noella on 01 apps</h4>
 </html>
