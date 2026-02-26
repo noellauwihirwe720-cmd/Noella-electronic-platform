@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Noella Electronics</title>
+    <title>Checkout - Noella Electronics</title>
     <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* Your existing styles remain the same */
         * {
             margin: 0;
             padding: 0;
@@ -16,13 +14,17 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+
         .navbar {
-            background: #2c3e50;
+            background: var(--primary-color);
             color: white;
             padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
 
         .nav-container {
@@ -36,12 +38,6 @@
 
         .logo h1 {
             font-size: 1.8rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .tagline {
-            font-size: 0.8rem;
-            opacity: 0.8;
         }
 
         .nav-links {
@@ -53,25 +49,22 @@
         .nav-links a {
             color: white;
             text-decoration: none;
-            font-weight: 500;
         }
 
-        .nav-links a:hover,
         .nav-links a.active {
-            color: #3498db;
+            color: var(--secondary-color);
         }
 
         .cart-icon {
             position: relative;
             cursor: pointer;
-            font-size: 1.2rem;
         }
 
         #cartCount {
             position: absolute;
             top: -8px;
             right: -8px;
-            background: #e74c3c;
+            background: var(--accent-color);
             color: white;
             border-radius: 50%;
             padding: 2px 6px;
@@ -86,48 +79,81 @@
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
         }
-        
-        .contact-form {
+
+        .checkout-form {
             background: white;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .form-group {
             margin-bottom: 1.5rem;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: #2c3e50;
         }
-        
+
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 6px;
-            font-size: 16px;
-            transition: border 0.3s;
+            font-size: 1rem;
         }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: #3498db;
-            outline: none;
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            background: var(--success-color);
+            color: white;
+            margin-top: 1rem;
         }
-        
+
+        .btn:hover {
+            background: #219a52;
+        }
+
+        .order-summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-top: 1rem;
+            text-align: right;
+        }
+
         .contact-info-box {
             background: white;
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
+
         .info-item {
             display: flex;
             align-items: center;
@@ -135,22 +161,21 @@
             padding: 1rem 0;
             border-bottom: 1px solid #eee;
         }
-        
-        .info-item:last-child {
-            border-bottom: none;
+
+        .business-hours {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
         }
-        
-        .info-icon {
-            font-size: 2rem;
-        }
-        
+
         .map-container {
             margin-top: 2rem;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        
+
         .success-message {
             background: #27ae60;
             color: white;
@@ -159,112 +184,42 @@
             margin-bottom: 1rem;
             display: none;
         }
-        
-        .business-hours {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 2rem;
-        }
-        
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .btn-primary {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-        
+
         .checkout-badge {
-            background: #e74c3c;
+            background: var(--accent-color);
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
             font-size: 0.9rem;
             margin-left: 10px;
         }
-        
-        .order-summary {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-        }
-        
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .order-item img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-        
-        .order-total {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #e74c3c;
-            margin-top: 1rem;
-            text-align: right;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
+
+        .progress-bar {
             width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-fill {
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.3s;
         }
-        
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 2rem;
-            border-radius: 10px;
-            max-width: 500px;
-            position: relative;
-        }
-        
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            margin-bottom: 10px;
+            display: none;
         }
 
         footer {
-            background: #2c3e50;
+            background: var(--primary-color);
             color: white;
             padding: 1.5rem 0;
             margin-top: 2rem;
@@ -277,35 +232,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .weather-info {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .search-box {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .search-box input {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            width: 200px;
-        }
-
-        .search-box button {
-            padding: 8px 15px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         .datetime {
@@ -318,38 +244,42 @@
         <div class="nav-container">
             <div class="logo">
                 <h1>Noella Electronics</h1>
-                <span class="tagline">Your Trusted Electronic Store in Kigali</span>
             </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="products.html">Products</a>
+                <a href="about.html">About Us</a>
                 <a href="contact.html" class="active">Contact</a>
-                <div class="cart-icon" onclick="viewCart()">
-                    🛒 <span id="cartCount">0</span>
-                </div>
+                <div class="cart-icon" onclick="viewCart()">🛒 <span id="cartCount">0</span></div>
             </div>
         </div>
     </nav>
     
     <div class="contact-page">
-        <!-- Contact/Checkout Form -->
+        <!-- Checkout Form -->
         <div>
-            <div class="contact-form">
-                <h2 id="formTitle">
-                    📝 Contact Us
-                    <span id="checkoutBadge" class="checkout-badge" style="display: none;">Checkout Mode</span>
+            <div class="checkout-form">
+                <h2>
+                    📝 Complete Your Order
+                    <span id="checkoutBadge" class="checkout-badge">Checkout</span>
                 </h2>
                 
                 <div id="successMessage" class="success-message"></div>
                 
-                <!-- Order Summary (shown only during checkout) -->
-                <div id="orderSummary" class="order-summary" style="display: none;">
+                <!-- Progress Bar -->
+                <div id="progressText" class="progress-text">Processing orders...</div>
+                <div id="progressBar" class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                
+                <!-- Order Summary -->
+                <div id="orderSummary" class="order-summary">
                     <h3>Your Order</h3>
                     <div id="orderItems"></div>
                     <div id="orderTotal" class="order-total"></div>
                 </div>
                 
-                <form id="messageForm">
+                <form id="checkoutForm">
                     <div class="form-group">
                         <label>Full Name *</label>
                         <input type="text" id="name" required placeholder="Enter your full name">
@@ -365,35 +295,25 @@
                         <input type="tel" id="phone" required placeholder="e.g., 0788 123 456">
                     </div>
                     
-                    <div class="form-group" id="addressGroup" style="display: none;">
+                    <div class="form-group">
                         <label>Delivery Address *</label>
-                        <input type="text" id="address" placeholder="Enter your address in Musanze">
+                        <input type="text" id="address" required placeholder="Enter your address">
                     </div>
                     
-                    <div class="form-group" id="subjectGroup">
-                        <label>Subject</label>
-                        <input type="text" id="subject" placeholder="What is this about?">
-                    </div>
-                    
-                    <div class="form-group" id="messageGroup">
-                        <label>Message</label>
-                        <textarea id="message" rows="5" placeholder="Your message..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary" id="submitBtn">
-                        📤 Send Message
+                    <button type="submit" class="btn" id="submitBtn">
+                        ✅ Place Order
                     </button>
                 </form>
             </div>
         </div>
         
-        <!-- Contact Information with Map -->
+        <!-- Contact Information -->
         <div>
             <div class="contact-info-box">
                 <h2>Contact Information</h2>
                 
                 <div class="info-item">
-                    <span class="info-icon">📍</span>
+                    <span style="font-size: 2rem;">📍</span>
                     <div>
                         <h4>Store Location</h4>
                         <p>Musanze, Muhoza - Rwanda</p>
@@ -401,27 +321,18 @@
                 </div>
                 
                 <div class="info-item">
-                    <span class="info-icon">📞</span>
+                    <span style="font-size: 2rem;">📞</span>
                     <div>
                         <h4>Phone Number</h4>
                         <p>+250 790627455</p>
-                        <p style="font-size: 0.9rem; color: #666;">Available 9am - 8pm</p>
                     </div>
                 </div>
                 
                 <div class="info-item">
-                    <span class="info-icon">✉️</span>
+                    <span style="font-size: 2rem;">✉️</span>
                     <div>
                         <h4>Email</h4>
                         <p>noellauwihirwe720@gmail.com</p>
-                    </div>
-                </div>
-                
-                <div class="info-item">
-                    <span class="info-icon">📱</span>
-                    <div>
-                        <h4>WhatsApp Business</h4>
-                        <p>+250 788426643</p>
                     </div>
                 </div>
             </div>
@@ -430,49 +341,16 @@
                 <h3>🕒 Business Hours</h3>
                 <p>Monday - Saturday: 9:00 AM - 8:00 PM</p>
                 <p>Sunday: 11:00 AM - 5:00 PM</p>
-                <p style="margin-top: 10px; font-size: 0.9rem;">*Orders placed after hours will be processed next business day</p>
-            </div>
-            
-            <!-- Google Maps -->
-            <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.475553789062!2d29.6315146!3d-1.5008942!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dc5a43629d20ad%3A0xcedbfcad56509e1b!2sMusanze!5e0!3m2!1sen!2srw!4v1234567890" 
-                    width="100%" 
-                    height="300" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy">
-                </iframe>
             </div>
         </div>
     </div>
     
     <footer>
         <div class="footer-content">
-            <div class="weather-info">
-                <span>☁️</span>
-                <span>22°C Musanze</span>
-            </div>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search products...">
-                <button onclick="searchProducts()">🔍</button>
-            </div>
+            <div>☁️ 22°C Musanze</div>
             <div class="datetime" id="currentDateTime"></div>
         </div>
     </footer>
-    
-    <!-- Cart Modal -->
-    <div id="cartModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Your Cart</h2>
-            <div id="cartItems"></div>
-            <div class="cart-total">
-                <strong>Total: <span id="cartTotal">0</span> RWF</strong>
-            </div>
-            <button class="btn btn-success" onclick="checkout()">Checkout</button>
-        </div>
-    </div>
 
     <script>
         // ==================== CONFIGURATION ====================
@@ -485,291 +363,197 @@
 
         const ADMIN_EMAIL = "noella.electronics@outlook.com";
         
-        // Initialize EmailJS
         emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-        console.log("✅ EmailJS initialized - LIVE MODE ACTIVE");
 
         // ==================== GLOBAL VARIABLES ====================
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let cart = JSON.parse(localStorage.getItem('pendingOrder')) || [];
         let products = JSON.parse(localStorage.getItem('products')) || [];
-
-        // ==================== CHECKOUT MODE DETECTION ====================
-        const urlParams = new URLSearchParams(window.location.search);
-        const isCheckout = urlParams.get('checkout') === 'true';
-        const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder')) || [];
-
-        // ==================== INITIALIZE PAGE ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCount();
-            updateDateTime();
+        
+        // ==================== DISPLAY ORDER SUMMARY ====================
+        function displayOrderSummary() {
+            const orderItems = document.getElementById('orderItems');
+            const orderTotal = document.getElementById('orderTotal');
             
-            if (isCheckout) {
-                setupCheckoutMode();
+            if (cart.length === 0) {
+                orderItems.innerHTML = '<p>No items in cart</p>';
+                orderTotal.innerHTML = 'Total: 0 RWF';
+                return;
             }
-        });
-
-        // ==================== SETUP CHECKOUT MODE ====================
-        function setupCheckoutMode() {
-            document.getElementById('formTitle').innerHTML = '📝 Complete Your Order <span class="checkout-badge">Checkout</span>';
-            document.getElementById('checkoutBadge').style.display = 'inline-block';
-            document.getElementById('submitBtn').textContent = '✅ Place Order';
-            document.getElementById('addressGroup').style.display = 'block';
-            document.getElementById('address').required = true;
-            document.getElementById('subjectGroup').style.display = 'none';
-            document.getElementById('messageGroup').style.display = 'none';
             
-            if (pendingOrder.length > 0) {
-                document.getElementById('orderSummary').style.display = 'block';
-                let itemsHtml = '';
-                let total = 0;
-                pendingOrder.forEach(item => {
-                    const product = products.find(p => p.id === item.id) || item;
-                    itemsHtml += `
-                        <div class="order-item">
-                            <img src="${product.imageUrl || 'https://via.placeholder.com/50'}" alt="${item.name}">
-                            <span>${item.name} x ${item.quantity}</span>
-                            <span>${Number(item.price * item.quantity).toLocaleString()} RWF</span>
-                        </div>
-                    `;
-                    total += item.price * item.quantity;
-                });
-                document.getElementById('orderItems').innerHTML = itemsHtml;
-                document.getElementById('orderTotal').innerHTML = `Total: ${total.toLocaleString()} RWF`;
-            }
+            let html = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                html += `
+                    <div class="order-item">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>${itemTotal.toLocaleString()} RWF</span>
+                    </div>
+                `;
+            });
+            
+            orderItems.innerHTML = html;
+            orderTotal.innerHTML = `Total: ${total.toLocaleString()} RWF`;
         }
 
-        // ==================== FORM SUBMISSION ====================
-        document.getElementById('messageForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address')?.value || '';
-            const subject = document.getElementById('subject')?.value || 'Contact Form';
-            const message = document.getElementById('message')?.value || 'No message';
-            
+        // ==================== PROCESS ORDER - ONE PRODUCT AT A TIME ====================
+        async function processOrder(customerData) {
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Processing...';
             
-            try {
-                if (isCheckout) {
-                    // Process order - LIVE MODE (NO DEMO)
-                    await processOrder({ name, email, phone, address });
-                    
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('successMessage').textContent = '✅ Order placed successfully! Check your email for confirmation.';
-                    document.getElementById('messageForm').reset();
-                    
-                    setTimeout(() => window.location.href = 'index.html', 3000);
-                } else {
-                    // Regular contact form
+            progressBar.style.display = 'block';
+            progressText.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Processing...';
+            
+            let successCount = 0;
+            let failedCount = 0;
+            
+            // Process each product one by one
+            for (let i = 0; i < cart.length; i++) {
+                const item = cart[i];
+                
+                // Update progress
+                const progress = ((i + 1) / cart.length) * 100;
+                progressFill.style.width = progress + '%';
+                progressText.textContent = `Processing ${i + 1} of ${cart.length}: ${item.name}`;
+                
+                // Find product details
+                const product = products.find(p => p.id === item.id) || item;
+                const itemTotal = item.price * item.quantity;
+                
+                try {
+                    // Send email to admin (YOU) for this product
                     await emailjs.send(
                         EMAILJS_CONFIG.SERVICE_ID,
                         EMAILJS_CONFIG.ADMIN_TEMPLATE,
                         {
                             to_email: ADMIN_EMAIL,
-                            reply_to: email,
-                            subject: subject,
-                            from_name: name,
-                            from_email: email,
-                            from_phone: phone,
-                            message: message,
-                            order_date: new Date().toLocaleString()
+                            reply_to: customerData.email,
+                            order_id: 'ORD-' + Date.now() + '-' + i,
+                            customer_name: customerData.name,
+                            customer_email: customerData.email,
+                            customer_phone: customerData.phone,
+                            customer_address: customerData.address,
+                            order_date: new Date().toLocaleString(),
+                            order_items: `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td style="text-align: center;">${item.quantity}</td>
+                                    <td style="text-align: right;">${item.price.toLocaleString()} RWF</td>
+                                    <td style="text-align: right;">${itemTotal.toLocaleString()} RWF</td>
+                                </tr>
+                            `,
+                            order_total: itemTotal.toLocaleString()
                         }
                     );
                     
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('successMessage').textContent = '✅ Message sent successfully! We\'ll reply within 24 hours.';
-                    document.getElementById('messageForm').reset();
+                    // Send confirmation to customer for this product
+                    await emailjs.send(
+                        EMAILJS_CONFIG.SERVICE_ID,
+                        EMAILJS_CONFIG.CUSTOMER_TEMPLATE,
+                        {
+                            to_email: customerData.email,
+                            reply_to: ADMIN_EMAIL,
+                            order_id: 'ORD-' + Date.now() + '-' + i,
+                            customer_name: customerData.name,
+                            order_items: `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td style="text-align: center;">${item.quantity}</td>
+                                    <td style="text-align: right;">${item.price.toLocaleString()} RWF</td>
+                                </tr>
+                            `,
+                            order_total: itemTotal.toLocaleString()
+                        }
+                    );
                     
-                    setTimeout(() => {
-                        document.getElementById('successMessage').style.display = 'none';
-                    }, 5000);
+                    successCount++;
+                    
+                } catch (error) {
+                    console.error(`Failed to process ${item.name}:`, error);
+                    failedCount++;
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('successMessage').style.display = 'block';
-                document.getElementById('successMessage').style.background = '#e74c3c';
-                document.getElementById('successMessage').textContent = '❌ Error: ' + error.message;
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = isCheckout ? '✅ Place Order' : '📤 Send Message';
+                
+                // Small delay to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
+            
+            // Show final result
+            progressFill.style.width = '100%';
+            
+            if (failedCount === 0) {
+                progressText.textContent = `✅ All ${successCount} orders processed successfully!`;
+                
+                // Clear cart
+                localStorage.removeItem('pendingOrder');
+                localStorage.removeItem('cart');
+                cart = [];
+                
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessage').textContent = 
+                    `✅ Order placed! ${successCount} confirmation emails sent.`;
+                
+                // Redirect after 3 seconds
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+                
+            } else {
+                progressText.textContent = `⚠️ ${successCount} succeeded, ${failedCount} failed. Please check email.`;
+                submitBtn.disabled = false;
+                submitBtn.textContent = '✅ Try Again';
+            }
+        }
+
+        // ==================== HANDLE FORM SUBMISSION ====================
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            await processOrder({ name, email, phone, address });
         });
 
-// ==================== PROCESS ORDER WITH CLEAN DATA ====================
-async function processOrder(customerData) {
-    const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder')) || [];
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    
-    if (pendingOrder.length === 0) throw new Error('No order to process');
-    
-    // Calculate total
-    const total = pendingOrder.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    // Format order items - SIMPLE and CLEAN
-    const orderItems = pendingOrder.map(item => {
-        const itemTotal = item.price * item.quantity;
-        return `
-            <tr>
-                <td>${item.name}</td>
-                <td style="text-align: center;">${item.quantity}</td>
-                <td style="text-align: right;">${Number(item.price).toLocaleString()} RWF</td>
-                <td style="text-align: right;">${Number(itemTotal).toLocaleString()} RWF</td>
-            </tr>
-        `;
-    }).join('');
-    
-    const orderId = 'ORD' + Date.now();
-    
-    // Update stock
-    pendingOrder.forEach(item => {
-        const productIndex = products.findIndex(p => p.id === item.id);
-        if (productIndex !== -1) {
-            products[productIndex].quantity -= item.quantity;
-        }
-    });
-    localStorage.setItem('products', JSON.stringify(products));
-    
-    try {
-        // Send email to admin
-        await emailjs.send(
-            EMAILJS_CONFIG.SERVICE_ID,
-            EMAILJS_CONFIG.ADMIN_TEMPLATE,
-            {
-                to_email: ADMIN_EMAIL,
-                reply_to: customerData.email,
-                order_id: orderId,
-                customer_name: customerData.name,
-                customer_email: customerData.email,
-                customer_phone: customerData.phone,
-                customer_address: customerData.address || 'Not provided',
-                order_date: new Date().toLocaleString(),
-                order_items: orderItems,
-                order_total: total.toLocaleString()
-            }
-        );
-        
-        // Send confirmation to customer
-        await emailjs.send(
-            EMAILJS_CONFIG.SERVICE_ID,
-            EMAILJS_CONFIG.CUSTOMER_TEMPLATE,
-            {
-                to_email: customerData.email,
-                reply_to: ADMIN_EMAIL,
-                order_id: orderId,
-                customer_name: customerData.name,
-                order_items: orderItems,
-                order_total: total.toLocaleString()
-            }
-        );
-        
-        // Clear cart
-        localStorage.removeItem('pendingOrder');
-        localStorage.setItem('cart', JSON.stringify([]));
-        cart = [];
-        updateCartCount();
-        
-        return true;
-        
-    } catch (error) {
-        console.error('Email error:', error);
-        throw new Error('Failed to send email: ' + error.message);
-    }
-}
-
-        // ==================== CART FUNCTIONS ====================
-        window.viewCart = function() {
-            const modal = document.getElementById('cartModal');
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p style="text-align: center; padding: 20px;">Your cart is empty</p>';
-                cartTotal.textContent = '0';
-            } else {
-                cartItems.innerHTML = cart.map(item => {
-                    const product = products.find(p => p.id === item.id) || item;
-                    return `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                            <img src="${product.imageUrl || 'https://via.placeholder.com/50'}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
-                            <div style="flex: 1; margin-left: 10px;">
-                                <h4>${item.name}</h4>
-                                <p>${Number(item.price).toLocaleString()} RWF x ${item.quantity}</p>
-                            </div>
-                            <div>
-                                <button onclick="updateQuantity(${item.id}, -1)" style="padding: 5px 10px;">-</button>
-                                <span style="margin: 0 10px;">${item.quantity}</span>
-                                <button onclick="updateQuantity(${item.id}, 1)" style="padding: 5px 10px;">+</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                
-                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                cartTotal.textContent = total.toLocaleString();
-            }
-            modal.style.display = 'block';
-        };
-
-        window.updateQuantity = function(productId, change) {
-            const item = cart.find(i => i.id === productId);
-            const product = products.find(p => p.id === productId);
-            if (!item || !product) return;
-            
-            const newQuantity = item.quantity + change;
-            if (newQuantity === 0) {
-                cart = cart.filter(i => i.id !== productId);
-            } else if (newQuantity > 0 && newQuantity <= product.quantity) {
-                item.quantity = newQuantity;
-            } else {
-                alert('Maximum stock reached');
-                return;
-            }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            viewCart();
-        };
-
-        window.checkout = function() {
-            if (cart.length === 0) {
-                alert('Your cart is empty');
-                return;
-            }
-            localStorage.setItem('pendingOrder', JSON.stringify(cart));
-            window.location.href = 'contact.html?checkout=true';
-        };
-
+        // ==================== UPDATE CART COUNT ====================
         function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cartItems.reduce((total, item) => total + item.quantity, 0);
             document.getElementById('cartCount').textContent = count;
         }
 
-        window.searchProducts = function() {
-            const term = document.getElementById('searchInput').value;
-            if (term) window.location.href = `products.html?search=${encodeURIComponent(term)}`;
+        // ==================== VIEW CART ====================
+        window.viewCart = function() {
+            alert('You are in checkout. Complete the form to place your order.');
         };
 
+        // ==================== DATE/TIME ====================
         function updateDateTime() {
             const now = new Date();
-            document.getElementById('currentDateTime').innerHTML = now.toLocaleTimeString() + ' • ' + now.toLocaleDateString();
+            document.getElementById('currentDateTime').innerHTML = 
+                now.toLocaleTimeString() + ' • ' + now.toLocaleDateString();
         }
-        setInterval(updateDateTime, 1000);
 
-        document.querySelector('.close')?.addEventListener('click', () => {
-            document.getElementById('cartModal').style.display = 'none';
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === document.getElementById('cartModal')) {
-                document.getElementById('cartModal').style.display = 'none';
-            }
-        });
-
-        document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') searchProducts();
+        // ==================== INITIALIZE ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            displayOrderSummary();
+            updateCartCount();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
         });
     </script>
 </body>
