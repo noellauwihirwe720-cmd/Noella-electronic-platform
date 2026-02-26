@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noella Electronics - Kigali's Trusted Electronics Store</title>
-    
     <style>
         * {
             margin: 0;
@@ -19,6 +18,7 @@
             --accent-color: #e74c3c;
             --success-color: #27ae60;
             --light-bg: #ecf0f1;
+            --admin-color: #9b59b6;
         }
 
         /* Navbar */
@@ -89,6 +89,26 @@
             font-size: 0.7rem;
         }
 
+        /* Admin Button in Navbar */
+        .admin-nav-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .admin-nav-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -132,10 +152,6 @@
         .btn-success {
             background: var(--success-color);
             color: white;
-        }
-
-        .btn-success:hover {
-            background: #219a52;
         }
 
         /* Categories */
@@ -197,7 +213,7 @@
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
         }
 
@@ -207,6 +223,9 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card:hover {
@@ -233,10 +252,13 @@
 
         .product-info {
             padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 0.5rem;
@@ -247,28 +269,18 @@
             background: var(--light-bg);
             padding: 0.3rem 1rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--primary-color);
-            margin-bottom: 0.8rem;
-            text-transform: capitalize;
-        }
-
-        .product-description {
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.5;
             margin-bottom: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            text-transform: capitalize;
+            align-self: flex-start;
         }
 
         .price-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin: 1rem 0;
         }
 
         .product-price {
@@ -278,11 +290,12 @@
         }
 
         .product-stock {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
             background: #e8f5e9;
             color: var(--success-color);
+            font-weight: 600;
         }
 
         .product-stock.out {
@@ -300,7 +313,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: background 0.3s;
-            font-size: 1rem;
+            margin-top: auto;
         }
 
         .add-to-cart:hover {
@@ -383,6 +396,43 @@
             font-size: 0.9rem;
         }
 
+        /* Floating Admin Button */
+        #floatingAdminBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 9999;
+            font-size: 1.8rem;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        #floatingAdminBtn:hover {
+            transform: scale(1.1);
+        }
+
+        #adminTooltip {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: #2c3e50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            display: none;
+            z-index: 9999;
+        }
+
         /* Modal */
         .modal {
             display: none;
@@ -393,13 +443,14 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
         }
 
         .modal-content {
             background-color: white;
             margin: 5% auto;
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: 15px;
             max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
@@ -412,19 +463,32 @@
             top: 1rem;
             font-size: 1.5rem;
             cursor: pointer;
-            z-index: 10;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f0f0f0;
         }
 
         .close:hover {
-            color: var(--accent-color);
+            background: #e0e0e0;
         }
 
         .cart-item {
-            transition: background-color 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
         }
 
-        .cart-item:hover {
-            background-color: #f9f9f9;
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
         }
 
         .quantity-btn {
@@ -436,22 +500,16 @@
             cursor: pointer;
             font-size: 18px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quantity-btn:hover {
-            background: #e0e0e0;
         }
 
         .cart-total {
             margin: 20px 0;
             padding: 15px;
             background: #f8f9fa;
-            border-radius: 5px;
+            border-radius: 8px;
             text-align: right;
             font-size: 1.2rem;
+            font-weight: bold;
         }
 
         .no-products {
@@ -468,7 +526,6 @@
             grid-column: 1 / -1;
         }
 
-        /* Admin note in footer */
         .admin-note {
             text-align: center;
             margin-top: 1rem;
@@ -481,34 +538,35 @@
             text-decoration: none;
         }
 
-        .admin-note a:hover {
-            text-decoration: underline;
-            color: var(--secondary-color);
-        }
-
-        /* Demo products for testing */
-        .demo-notice {
-            background: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            text-align: center;
-            margin: 10px auto;
-            max-width: 1200px;
-            border-radius: 5px;
-        }
-
-        .demo-notice button {
-            background: #27ae60;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            margin-left: 10px;
-            cursor: pointer;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
         }
 
-        .demo-notice button:hover {
-            background: #219a52;
+        .notification.success {
+            background: #27ae60;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -529,6 +587,7 @@
                 <div class="cart-icon" onclick="viewCart()">
                     🛒 <span id="cartCount">0</span>
                 </div>
+                <a href="admin_login.html" class="admin-nav-btn">🔑 Admin</a>
             </div>
         </div>
     </nav>
@@ -542,12 +601,7 @@
         </div>
     </section>
 
-    <!-- Demo Products Notice (will show when no products exist) -->
-    <div id="demoNotice" class="demo-notice" style="display: none;">
-        ⚡ No products found. Click <button onclick="addDemoProducts()">Add Demo Products</button> to see sample products with working "Buy" buttons.
-    </div>
-
-    <!-- Featured Categories with Descriptions -->
+    <!-- Featured Categories -->
     <section class="categories">
         <h2>Shop by Category</h2>
         <div class="category-grid" id="categoryGrid"></div>
@@ -570,12 +624,12 @@
         </div>
     </section>
 
-    <!-- Footer with Weather & Info -->
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="weather-info">
-                <span id="weatherIcon">☁️</span>
-                <span id="weatherTemp">22°C Kigali</span>
+                <span>☁️</span>
+                <span>22°C Kigali</span>
             </div>
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Search products...">
@@ -588,7 +642,11 @@
         </div>
     </footer>
 
-    <!-- Cart Modal - FIXED VERSION -->
+    <!-- Floating Admin Login Button -->
+    <div id="floatingAdminBtn" onclick="window.location.href='admin_login.html'">🔑</div>
+    <div id="adminTooltip">Admin Login</div>
+
+    <!-- Cart Modal -->
     <div id="cartModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeCartModal()">&times;</span>
@@ -598,12 +656,8 @@
                 <strong>Total: <span id="cartTotal">0</span> RWF</strong>
             </div>
             <div style="display: flex; gap: 10px;">
-                <button class="btn btn-success" onclick="checkout()" style="flex: 2; padding: 12px; font-size: 1.1rem;">
-                    ✅ Checkout
-                </button>
-                <button class="btn" onclick="closeCartModal()" style="flex: 1; background: #95a5a6; color: white; padding: 12px; font-size: 1.1rem;">
-                    ✖ Close
-                </button>
+                <button class="btn btn-success" onclick="checkout()" style="flex: 2;">✅ Checkout</button>
+                <button class="btn" onclick="closeCartModal()" style="flex: 1; background: #95a5a6;">✖ Close</button>
             </div>
         </div>
     </div>
@@ -619,158 +673,110 @@
 
         const ADMIN_EMAIL = "noella.electronics@outlook.com";
         
-        // Initialize EmailJS if available
         if (typeof emailjs !== 'undefined') {
             emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-            console.log("✅ EmailJS initialized");
         }
 
         // ==================== GLOBAL VARIABLES ====================
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let products = [];
-        
-        // ==================== ADD DEMO PRODUCTS ====================
-        window.addDemoProducts = function() {
-            const demoProducts = [
-                {
-                    id: 1001,
-                    name: "iPhone 15 Pro Max",
-                    category: "phones",
-                    price: 1500000,
-                    quantity: 10,
-                    description: "Latest Apple smartphone with A17 Pro chip, titanium design, and advanced camera system.",
-                    imageUrl: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-15-pro-max-finish-select-202309-6-7inch-bluetitanium?wid=5120&hei=2880&fmt=webp"
-                },
-                {
-                    id: 1002,
-                    name: "Samsung 4K Smart TV",
-                    category: "tvs",
-                    price: 850000,
-                    quantity: 5,
-                    description: "55-inch 4K Ultra HD Smart TV with vibrant colors and built-in streaming apps.",
-                    imageUrl: "https://images.samsung.com/is/image/samsung/p6pim/uk/ua55tu8000kxxu/gallery/uk-uhd-tu8000-ua55tu8000kxxu-368459481?$650_519_PNG$"
-                },
-                {
-                    id: 1003,
-                    name: "MacBook Air M2",
-                    category: "laptops",
-                    price: 1800000,
-                    quantity: 8,
-                    description: "13.6-inch laptop with Apple M2 chip, all-day battery life, and stunning Liquid Retina display.",
-                    imageUrl: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-midnight-select-20220606?wid=904&hei=840&fmt=jpeg&qlt=90&.v=1653084303665"
-                },
-                {
-                    id: 1004,
-                    name: "Sony WH-1000XM5",
-                    category: "headphones",
-                    price: 450000,
-                    quantity: 15,
-                    description: "Industry-leading noise canceling wireless headphones with exceptional sound quality.",
-                    imageUrl: "https://www.sony.com/image/5d7b6e8b0c8e8b5c0b8c8b5c0b8c8b5c?fmt=jpeg&wid=600"
-                }
-            ];
-            
-            localStorage.setItem('products', JSON.stringify(demoProducts));
-            products = demoProducts;
-            loadProducts();
-            document.getElementById('demoNotice').style.display = 'none';
-            showNotification('✅ Demo products added! You can now test the Buy buttons.', 'success');
-        };
-        
+
+        // ==================== FLOATING BUTTON TOOLTIP ====================
+        document.getElementById('floatingAdminBtn').addEventListener('mouseenter', function() {
+            document.getElementById('adminTooltip').style.display = 'block';
+        });
+        document.getElementById('floatingAdminBtn').addEventListener('mouseleave', function() {
+            document.getElementById('adminTooltip').style.display = 'none';
+        });
+
         // ==================== SHOW NOTIFICATION ====================
-        function showNotification(message, type) {
+        function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
-                color: white;
-                border-radius: 5px;
-                z-index: 9999;
-                animation: slideIn 0.3s ease;
-            `;
+            notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+            setTimeout(() => notification.remove(), 3000);
         }
-        
-        // ==================== LOAD PRODUCTS ====================
+
+        // ==================== LOAD PRODUCTS - FIXED WITH FALLBACK ====================
         function loadProducts() {
             const grid = document.getElementById('featuredProducts');
             
-            // Get products from localStorage
-            const storedProducts = JSON.parse(localStorage.getItem('products')) || [];
+            // Get products from localStorage (your uploaded products)
+            let storedProducts = JSON.parse(localStorage.getItem('products')) || [];
             products = storedProducts;
             
             console.log('Loaded products:', products.length);
             
             if (products.length === 0) {
-                grid.innerHTML = '<div class="no-products">No products yet. Check back soon!</div>';
-                document.getElementById('demoNotice').style.display = 'block';
+                // If no products, show message but don't add default products
+                grid.innerHTML = '<div class="no-products">No products available. Please check back later.</div>';
                 return;
             }
             
-            document.getElementById('demoNotice').style.display = 'none';
-            
-            // Show only first 8 products on homepage
+            // Show first 8 products
             const featuredProducts = products.slice(0, 8);
-            
-            grid.innerHTML = featuredProducts.map(product => `
-                <div class="product-card">
-                    <div class="image-container">
-                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='https://via.placeholder.com/200?text=No+Image'">
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <span class="product-category">📌 ${product.category}</span>
-                        <p class="product-description">${product.description || 'No description available'}</p>
-                        <div class="price-section">
-                            <span class="product-price">${Number(product.price).toLocaleString()} RWF</span>
-                            <span class="product-stock ${product.quantity === 0 ? 'out' : ''}">
-                                ${product.quantity > 0 ? '✅ In Stock' : '❌ Out of Stock'}
-                            </span>
-                        </div>
-                        <button class="add-to-cart" 
-                                onclick="addToCart(${product.id})"
-                                ${product.quantity === 0 ? 'disabled' : ''}>
-                            Add to Cart
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+            displayProducts(featuredProducts);
         }
-        
+
+        // ==================== DISPLAY PRODUCTS WITH FALLBACK IMAGES ====================
+        function displayProducts(productsToShow) {
+            const grid = document.getElementById('featuredProducts');
+            
+            if (!productsToShow || productsToShow.length === 0) {
+                grid.innerHTML = '<div class="no-products">No products available</div>';
+                return;
+            }
+            
+            let html = '';
+            productsToShow.forEach(p => {
+                // Add fallback image if main image fails to load
+                html += `
+                    <div class="product-card">
+                        <div class="image-container">
+                            <img src="${p.imageUrl}" 
+                                 alt="${p.name}" 
+                                 class="product-image" 
+                                 onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">${p.name}</h3>
+                            <span class="product-category">📌 ${p.category}</span>
+                            <div class="price-section">
+                                <span class="product-price">${Number(p.price).toLocaleString()} RWF</span>
+                                <span class="product-stock ${p.quantity === 0 ? 'out' : ''}">
+                                    ${p.quantity > 0 ? '✅ In Stock' : '❌ Out of Stock'}
+                                </span>
+                            </div>
+                            <button class="add-to-cart" 
+                                    onclick="addToCart(${p.id})"
+                                    ${p.quantity === 0 ? 'disabled' : ''}>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
         // ==================== ADD TO CART ====================
-        window.addToCart = function(productId) {
-            const product = products.find(p => p.id === productId);
+        window.addToCart = function(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
             
-            if (!product) {
-                alert('Product not found');
-                return;
-            }
+            const existing = cart.find(i => i.id === id);
             
-            if (product.quantity <= 0) {
-                alert('Out of stock');
-                return;
-            }
-            
-            const existingItem = cart.find(item => item.id === productId);
-            
-            if (existingItem) {
-                if (existingItem.quantity < product.quantity) {
-                    existingItem.quantity++;
+            if (existing) {
+                if (existing.quantity < product.quantity) {
+                    existing.quantity++;
                 } else {
-                    alert('Not enough stock');
+                    showNotification('Not enough stock!', 'error');
                     return;
                 }
             } else {
                 cart.push({
-                    id: productId,
+                    id: product.id,
                     name: product.name,
                     price: product.price,
                     quantity: 1,
@@ -781,226 +787,139 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
-            showNotification('✅ Added to cart!', 'success');
+            showNotification(`${product.name} added to cart!`);
         };
-        
+
         // ==================== UPDATE CART COUNT ====================
         function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
-            const cartCountEl = document.getElementById('cartCount');
-            if (cartCountEl) cartCountEl.textContent = count;
+            const count = cart.reduce((t, i) => t + i.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
         }
-        
-        // ==================== VIEW CART - FIXED WITH BUTTONS ====================
+
+        // ==================== VIEW CART ====================
         window.viewCart = function() {
             const modal = document.getElementById('cartModal');
             const cartItems = document.getElementById('cartItems');
             const cartTotal = document.getElementById('cartTotal');
             
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let products = JSON.parse(localStorage.getItem('products')) || [];
-            
             if (cart.length === 0) {
-                cartItems.innerHTML = '<p style="text-align: center; padding: 20px; color: #666;">Your cart is empty</p>';
+                cartItems.innerHTML = '<p style="text-align:center; padding:20px;">Your cart is empty</p>';
                 cartTotal.textContent = '0';
             } else {
-                let itemsHtml = '';
+                let html = '';
                 let total = 0;
                 
                 cart.forEach(item => {
-                    const product = products.find(p => p.id === item.id) || item;
                     const itemTotal = item.price * item.quantity;
                     total += itemTotal;
                     
-                    itemsHtml += `
-                        <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee;">
-                            <div style="display: flex; align-items: center; gap: 10px; flex: 2;">
-                                <img src="${product.imageUrl || 'https://via.placeholder.com/50'}" 
-                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                    html += `
+                        <div class="cart-item">
+                            <div style="display:flex; align-items:center; gap:10px; flex:2;">
+                                <img src="${item.image}" style="width:50px; height:50px; object-fit:cover;" onerror="this.src='https://via.placeholder.com/50'">
                                 <div>
-                                    <h4 style="margin: 0 0 5px 0;">${item.name}</h4>
-                                    <p style="margin: 0; color: #666;">${Number(item.price).toLocaleString()} RWF each</p>
+                                    <h4>${item.name}</h4>
+                                    <p>${item.price.toLocaleString()} RWF each</p>
                                 </div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <button onclick="updateQuantity(${item.id}, -1)" 
-                                        class="quantity-btn"
-                                        style="width: 35px; height: 35px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
-                                    −
-                                </button>
-                                <span style="min-width: 30px; text-align: center; font-weight: bold;">${item.quantity}</span>
-                                <button onclick="updateQuantity(${item.id}, 1)" 
-                                        class="quantity-btn"
-                                        style="width: 35px; height: 35px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
-                                    +
-                                </button>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)" ${item.quantity <= 1 ? 'disabled' : ''}>−</button>
+                                <span style="font-weight:bold;">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)" ${item.quantity >= item.maxQuantity ? 'disabled' : ''}>+</button>
                             </div>
                         </div>
                     `;
                 });
                 
-                cartItems.innerHTML = itemsHtml;
+                cartItems.innerHTML = html;
                 cartTotal.textContent = total.toLocaleString();
             }
             
             modal.style.display = 'block';
         };
-        
-        // ==================== UPDATE QUANTITY - FIXED ====================
-        window.updateQuantity = function(productId, change) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let products = JSON.parse(localStorage.getItem('products')) || [];
+
+        // ==================== UPDATE QUANTITY ====================
+        window.updateQuantity = function(id, change) {
+            const index = cart.findIndex(i => i.id === id);
+            if (index === -1) return;
             
-            const itemIndex = cart.findIndex(i => i.id === productId);
-            const product = products.find(p => p.id === productId);
+            const newQty = cart[index].quantity + change;
             
-            if (itemIndex === -1 || !product) return;
-            
-            const item = cart[itemIndex];
-            const newQuantity = item.quantity + change;
-            
-            if (newQuantity === 0) {
-                // Remove item if quantity becomes 0
-                cart.splice(itemIndex, 1);
-            } else if (newQuantity > 0 && newQuantity <= product.quantity) {
-                // Update quantity if within stock
-                item.quantity = newQuantity;
+            if (newQty === 0) {
+                cart.splice(index, 1);
+            } else if (newQty <= cart[index].maxQuantity) {
+                cart[index].quantity = newQty;
             } else {
-                alert('Maximum stock reached');
+                showNotification('Maximum stock reached!', 'error');
                 return;
             }
             
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
-            viewCart(); // Refresh the cart modal
+            viewCart();
         };
-        
-        // ==================== CHECKOUT - FIXED ====================
+
+        // ==================== CHECKOUT ====================
         window.checkout = function() {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
             if (cart.length === 0) {
-                alert('Your cart is empty');
+                showNotification('Your cart is empty!', 'error');
                 return;
             }
             
-            // Save cart to pending order
             localStorage.setItem('pendingOrder', JSON.stringify(cart));
-            
-            // Redirect to checkout page
             window.location.href = 'contact.html?checkout=true';
         };
-        
+
         // ==================== CLOSE CART MODAL ====================
         window.closeCartModal = function() {
             document.getElementById('cartModal').style.display = 'none';
         };
-        
-        // ==================== SEARCH PRODUCTS ====================
+
+        // ==================== SEARCH ====================
         window.searchProducts = function() {
-            const term = document.getElementById('searchInput').value;
+            const term = document.getElementById('searchInput').value.trim();
             if (term) {
                 window.location.href = `products.html?search=${encodeURIComponent(term)}`;
             }
         };
-        
-        // ==================== UPDATE DATE AND TIME ====================
+
+        // ==================== DATE/TIME ====================
         function updateDateTime() {
             const now = new Date();
-            document.getElementById('currentDateTime').innerHTML = now.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: true 
-            }) + ' • ' + now.toLocaleDateString('en-US', {
-                month: '2-digit',
-                day: '2-digit',
-                year: 'numeric'
-            });
+            document.getElementById('currentDateTime').innerHTML = 
+                now.toLocaleTimeString() + ' • ' + now.toLocaleDateString();
         }
-        
-        // ==================== COUNTDOWN TIMER ====================
+
+        // ==================== COUNTDOWN ====================
         function startCountdown() {
-            const countdownEl = document.getElementById('countdown');
-            const endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
-            
-            const timer = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = endTime - now;
-                
-                if (distance < 0) {
-                    clearInterval(timer);
-                    countdownEl.innerHTML = "SALE ENDED";
-                    return;
-                }
-                
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                countdownEl.innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+            const el = document.getElementById('countdown');
+            const end = Date.now() + 86400000;
+            setInterval(() => {
+                const d = end - Date.now();
+                if (d < 0) el.innerHTML = 'SALE ENDED';
+                else el.innerHTML = `${Math.floor(d/3600000)}h ${Math.floor((d%3600000)/60000)}m ${Math.floor((d%60000)/1000)}s`;
             }, 1000);
         }
-        
-        // ==================== LOAD CATEGORIES WITH DESCRIPTIONS ====================
+
+        // ==================== LOAD CATEGORIES ====================
         function loadCategories() {
             const categories = [
-                { 
-                    name: 'Phones', 
-                    emoji: '📱', 
-                    category: 'phones',
-                    description: 'Latest smartphones from top brands'
-                },
-                { 
-                    name: 'Laptops', 
-                    emoji: '💻', 
-                    category: 'laptops',
-                    description: 'Powerful laptops for work & play'
-                },
-                { 
-                    name: 'TVs', 
-                    emoji: '📺', 
-                    category: 'tvs',
-                    description: '4K Smart TVs with stunning picture'
-                },
-                { 
-                    name: 'Speakers', 
-                    emoji: '🔊', 
-                    category: 'speakers',
-                    description: 'Premium sound for every space'
-                },
-                { 
-                    name: 'Headphones', 
-                    emoji: '🎧', 
-                    category: 'headphones',
-                    description: 'Wireless and noise-cancelling'
-                }
+                {name:'Phones', emoji:'📱', cat:'phones', desc:'Latest smartphones from top brands'},
+                {name:'Laptops', emoji:'💻', cat:'laptops', desc:'Powerful laptops for work & play'},
+                {name:'TVs', emoji:'📺', cat:'tvs', desc:'4K Smart TVs with stunning picture'},
+                {name:'Speakers', emoji:'🔊', cat:'speakers', desc:'Premium sound for every space'},
+                {name:'Headphones', emoji:'🎧', cat:'headphones', desc:'Wireless and noise-cancelling'}
             ];
             
-            const grid = document.getElementById('categoryGrid');
-            grid.innerHTML = categories.map(cat => `
-                <div class="category-card" onclick="window.location.href='products.html?category=${cat.category}'">
-                    <div class="emoji">${cat.emoji}</div>
-                    <h3>${cat.name}</h3>
-                    <p>${cat.description}</p>
-                </div>
-            `).join('');
+            document.getElementById('categoryGrid').innerHTML = categories.map(c => 
+                `<div class="category-card" onclick="window.location.href='products.html?category=${c.cat}'">
+                    <div class="emoji">${c.emoji}</div>
+                    <h3>${c.name}</h3>
+                    <p>${c.desc}</p>
+                </div>`
+            ).join('');
         }
-        
-        // ==================== MODAL CLOSE ON OUTSIDE CLICK ====================
-        window.addEventListener('click', (e) => {
-            const modal = document.getElementById('cartModal');
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-        
-        // ==================== SEARCH ENTER KEY ====================
-        document.getElementById('searchInput')?.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchProducts();
-            }
-        });
-        
+
         // ==================== INITIALIZE ====================
         document.addEventListener('DOMContentLoaded', () => {
             loadCategories();
